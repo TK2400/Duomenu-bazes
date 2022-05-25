@@ -53,23 +53,20 @@ app.get("/", (req, res) => {
     database
         .collection("users")
         .find()
-        .toArray(function (err, result) {
-            if (err) {
-                res.send(err)
-            } else {
-                res.send(result)
-            }
-        })
-})
+        .toArray((err, result) => err ? res.send(err) : res.send(result))
+}
+)
+
+
 
 
 app.get("/users/:name", (req, res) => {
-   
+
     return database
         .collection("users")
 
         // 72 eiluteje naujas find uzrasymas, jeigu dirbama per duomenu baze
-        .find({name:req.params.name})
+        .find({ name: req.params.name })
         .toArray(function (err, result) {
             if (err) {
                 res.send(err)
