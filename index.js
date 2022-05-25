@@ -49,22 +49,37 @@ mongoClient.connect(function (err, client) {
     // });
 });
 
-app.get("/", (req, res) =>{
+app.get("/", (req, res) => {
     database
-    .collection("users")
-    .find()
-    .toArray( function (err, result) {
-        if (err) {
-            res.send(err)
-        } else {
-            res.send(result)
-        }
-    })
+        .collection("users")
+        .find()
+        .toArray(function (err, result) {
+            if (err) {
+                res.send(err)
+            } else {
+                res.send(result)
+            }
+        })
+})
+
+
+app.get("/users/:name", (req, res) => {
+   
+    return database
+        .collection("users")
+        .find({name:req.params.name})
+        .toArray(function (err, result) {
+            if (err) {
+                res.send(err)
+            } else {
+                res.send(result)
+            }
+        })
 })
 
 
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
-  });
+});
 
