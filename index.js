@@ -67,6 +67,8 @@ app.get("/users/:name", (req, res) => {
    
     return database
         .collection("users")
+
+        // 72 eiluteje naujas find uzrasymas, jeigu dirbama per duomenu baze
         .find({name:req.params.name})
         .toArray(function (err, result) {
             if (err) {
