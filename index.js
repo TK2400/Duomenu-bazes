@@ -1,10 +1,15 @@
+const express = require("express");
+const app = express();
+const port = 3000;
+
+
 const MongoClient = require("mongodb").MongoClient;
 
 const mongoClient = new MongoClient("mongodb+srv://TK:TK2400@cluster0.y5udm.mongodb.net/?retryWrites=true&w=majority")
-
+let database
 mongoClient.connect(function (err, client) {
-    const database = client.db("usersdb");
-    const collection = database.collection("users");
+    database = client.db("usersdb");
+    // const collection = database.collection("users");
 
     // collection
     //     .find({ name: "Brad" })
@@ -13,13 +18,13 @@ mongoClient.connect(function (err, client) {
     //         client.close()
     //     })
 
-    collection
-    .find( {age: { $gt: 35} })
-    . toArray(function (err, result) {
-        console.log(result);
-        client.close()
-        return
-    })
+    // collection
+    // .find( {age: { $gt: 35} })
+    // . toArray(function (err, result) {
+    //     console.log(result);
+    //     client.close()
+    //     return
+    // })
 
     // const newUsers = [
     //     { name: "Tom", age: 30 },
@@ -28,10 +33,12 @@ mongoClient.connect(function (err, client) {
     //     { name: "Brad", age: 50 },
     //     { name: "Tim", age: 15 },
     // ];
+
     // collection.insertMany(newUsers, function (err, result) {
     //     if (err) {
     //         return console.log("Failed to write an user");
     //     }
+
     //     collection.find().toArray(function (err, result) {
     //         if (err) {
     //             return console.log("errr", err);
@@ -42,5 +49,22 @@ mongoClient.connect(function (err, client) {
     // });
 });
 
+app.get("/", (req, res) =>{
+    database
+    .collection("users")
+    .find()
+    .toArray( function (err, result) {
+        if (err) {
+            res.send(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
 
+
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
+  });
 
