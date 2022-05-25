@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+//5-a eilute reikalinga jei naudojame POST metoda
+app.use(express.json())
 
 
 const MongoClient = require("mongodb").MongoClient;
@@ -49,6 +51,8 @@ mongoClient.connect(function (err, client) {
     // });
 });
 
+
+
 app.get("/", (req, res) => {
     database
         .collection("users")
@@ -76,6 +80,26 @@ app.get("/users/:name", (req, res) => {
         })
 })
 
+app.post("/users/user", (req, res) => {
+
+    const newUser = req.body
+    database.collection("users").insertOne(newUser, function (err, result) {
+        if (err) {
+            return console.log("failed to add an user")
+        }
+        console.log(res.send(result))
+        client.close()
+    })
+   
+
+    // if (database.collection("users").find(user.name === newUser.name || user.age === newUser.age)) {
+    //     return res.send("user su tokiais pata duomenis jau yra")
+    // }
+    // else {
+    //     database.collection("users").push({ ...newUser })
+    //     return res.send("naujas useris pridetas")
+    // }
+})
 
 
 app.listen(port, () => {
